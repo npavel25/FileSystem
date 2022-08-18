@@ -16,7 +16,7 @@ void FileSystem::create()
         for (int i=0; i < MAX_SIZE / sizeof(j); ++i)
         {
           fs.write((char*)&j, sizeof(j));
-          if (i%100 == 0) std::cout << "i:" << i << std::endl;
+          //if (i%100 == 0) std::cout << "i:" << i << std::endl;
         }
         std::cout << "File System has been successfully created." << std::endl;
     }

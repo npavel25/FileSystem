@@ -3,6 +3,9 @@
 
 #include "fs.h"
 
+//#include <cstdint>
+//#include <iostream>
+
 namespace My {
 
 class FileMetaData;
@@ -15,12 +18,13 @@ public:
     void read();
     void write();
     void flush();
+    size_t size() const { return _size; }
 
 private:
     const FileSystem fs;
     //FileMetaData fileMetaData;
     std::string _name;
-    int _size;
+    size_t _size;
     int64_t start_block_id = -1;
     void *_data;
 };

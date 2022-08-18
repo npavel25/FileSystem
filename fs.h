@@ -1,6 +1,10 @@
 #ifndef FS_H
 #define FS_H
 
+
+//#include "file.h"
+#include "metadata.h"
+
 #include <cstdint>
 #include <iostream>
 #include <map>
@@ -8,7 +12,7 @@
 
 namespace My {
 
-class FileSystem 
+class FileSystem: private MetaData 
 {
     static constexpr int MAX_SIZE = 1024*1024*256; // 256 Mb
     static constexpr int BLOCK_SIZE = 1024; //1 Kb
@@ -27,6 +31,8 @@ public:
     void create();
     bool read();
     void destroy();
+
+   // bool hasEnoughFreeSpace(const File &file) {return file.size() < free_space();}
 
 private:
     std::string getFileName () const { return _fileName + "." +_fileExt; }
