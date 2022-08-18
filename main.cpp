@@ -1,8 +1,9 @@
 #include "fs.h"
 #include "metadata.h"
+#include "user.h"
 
 //#include <filesystem>
-#include "user.h"
+
 
 int main()
 {
@@ -34,8 +35,11 @@ int main()
     {
         std::cout << "Hello, I am root!" << std::endl;
     }
-    std::shared_ptr<My::User> currentUser = root.createUser("pnikolae");
+    std::shared_ptr<My::User> currentUser = root.createUser("nikolaev");
     std::cout << "Hello, I am " << currentUser->name() << std::endl;
+
+    std::shared_ptr<My::User> currentUser2 = root.createUser("nikolaev");
+    std::cout << "Hello, I am " << currentUser2->name() << std::endl;
     
 
     return 0;

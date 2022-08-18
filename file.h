@@ -3,6 +3,8 @@
 
 #include "fs.h"
 
+#include <memory>
+
 //#include <cstdint>
 //#include <iostream>
 
@@ -15,8 +17,11 @@ class File
 
 public:
     File(const std::string &name, int size);
+    File();
+    void open(const std::string& name);
     void read();
-    void write();
+    void write(const void *data, size_t size);
+    void append(const void *data, size_t size);
     void flush();
     size_t size() const { return _size; }
 
@@ -26,7 +31,7 @@ private:
     std::string _name;
     size_t _size;
     int64_t start_block_id = -1;
-    void *_data;
+    std::vector<uint8_t> _data;
 };
 
 class FileMetaData

@@ -14,19 +14,19 @@ namespace My {
 
 class FileSystem: private MetaData 
 {
-    static constexpr int MAX_SIZE = 1024*1024*256; // 256 Mb
+    /*static constexpr int MAX_SIZE = 1024*1024*256; // 256 Mb
     static constexpr int BLOCK_SIZE = 1024; //1 Kb
-    static constexpr int MAGIC = 31415926;
+    static constexpr int MAGIC = 31415926;*/
 
 public:
     FileSystem(const std::string &fileName, const std::string &fileExt)
     : _fileName(fileName)
     , _fileExt(fileExt)
     {
-        for(int64_t i = 1; i <= MAX_SIZE / BLOCK_SIZE; ++i)
+        /*for(int64_t i = 1; i <= MAX_SIZE / BLOCK_SIZE; ++i)
         {
             FAT[i] = 0;
-        }
+        }*/
     }
     void create();
     bool read();
@@ -40,7 +40,7 @@ private:
     const std::string _fileExt;
 public:
     //block_id -> next_block_id
-    std::map <int64_t, int64_t> FAT; // what if I need 4?
+    //std::map <int64_t, int64_t> FAT; // what if I need 4?
 
     //std::vector<void> data;
 
