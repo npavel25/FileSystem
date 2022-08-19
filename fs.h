@@ -34,7 +34,7 @@ public:
 
     std::shared_ptr<File> create_file(std::string name);
     void flush(File& file);
-    void remove_file();
+    void remove_file(const std::string& name);
 
     bool hasEnoughFreeSpace(const File &file);
     std::string getFileName () const { return _fileName + "." +_fileExt; }

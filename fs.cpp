@@ -13,10 +13,8 @@ void FileSystem::create()
     if(fstrm.is_open())
     {
         //fs.write((char*)&MAGIC, sizeof(MAGIC));
-        MetaData::write(fstrm);
-        //long pos = fs.tellp();
-        fstrm.seekp(BLOCK_SIZE);
-        _blocks.resize(MAX_SIZE / BLOCK_SIZE);
+        
+        _blocks.resize(MAX_SIZE / BLOCK_SIZE + 1);
         for (auto& elem: _blocks)
         {
             elem.resize(BLOCK_SIZE);
@@ -24,6 +22,9 @@ void FileSystem::create()
             fstrm.write(reinterpret_cast<const char*>(elem.data()), elem.size());
 
         }
+        fstrm.seekp(0);
+        MetaData::write(fstrm);
+        
         /*uint64_t j = 0;
         for (int i=0; i < MAX_SIZE / sizeof(j); ++i)
         {
@@ -77,6 +78,25 @@ bool FileSystem::hasEnoughFreeSpace(const File &file)
 
 std::shared_ptr<File> FileSystem::create_file(std::string name)
 {
+
+}
+
+void FileSystem::remove_file(const std::string& name)
+{
+    auto iter = _files.find(name);
+    if (iter != _files.end())
+    {
+        int64_t start_idx = iter->second;
+        clear_FAT(start_idx);
+        _files.erase(iter);
+        
+        std::fstream fstrm;
+        fstrm.open(getFileName(), std::fstream::out | std::fstream::binary);
+        if(fstrm.is_open())
+        {
+            MetaData::write(fstrm);
+        }
+    }
 
 }
 
