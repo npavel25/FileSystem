@@ -8,15 +8,25 @@ namespace My {
 
 void File::open(const std::string& name)
 {
-    //auto iter = fs._files.find(name);
-
+    auto iter = _filesystem._files.find(name);
+    if(iter != _filesystem._files.end())
+    {
+        start_block_id = iter->second;
+    }
 }
 void File::read()
 {
-    //TODO: change to find()
-    //for(int64_t next_block_id = start_block_id; next_block_id != -1; next_block_id = fs._FAT.at(next_block_id)) // fs.FAT[] ??
+    //1. read file meta data - skip for now
+    //std::vector<uint8_t> _data;
+    int64_t idx = start_block_id;
+    int block_count = 0;
+
+    while(idx != -1)
     {
         //read_block(next_block_id);
+        _data.resize((block_count+1)*_filesystem.BLOCK_SIZE);
+        memcpy(_data.data() + block_count*_filesystem.BLOCK_SIZE, _filesystem._blocks[idx].data(), _filesystem.BLOCK_SIZE);
+        idx = _filesystem._FAT[idx];
     }
 }
 
@@ -40,22 +50,6 @@ void File::append(const void *data, size_t size)
 void File::flush()
 {
     _filesystem.flush(*this);
-    // 1. write metadata to disk
-    // 2. write data to disk
-    /*if(fs.hasEnoughFreeSpace(*this))
-    {
-        std::fstream fstr(fs.getFileName(), std::fstream::out | std::fstream::binary);
-        if(fstr.is_open())
-        {
-            fs.seekp(fs.BLOCK_SIZE);//skip filesystem metadata
-            fs.write(reinterpret_cast<const char*>(_data.data()),fs.BLOCK_SIZE);
-    
-        }
-    }
-    else std::cout << "Not enough free space in the file system!" << std::endl;*/
-    
-    
-
 }
 
 }

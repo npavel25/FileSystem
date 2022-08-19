@@ -31,11 +31,8 @@ bool MetaData::write(std::ostream& ostrm)
             ostrm.write(reinterpret_cast<const char*>(&filename), filename_size);
             ostrm.write(reinterpret_cast<const char*>(&start_idx), sizeof(start_idx));
         }
-
     }
-
     return ostrm.good();
-
 }
 
 bool MetaData::read(std::istream& istrm)

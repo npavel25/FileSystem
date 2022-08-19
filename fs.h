@@ -24,7 +24,8 @@ class FileSystem: private MetaData
 
 public:
     using block_t = std::vector<uint8_t>;
-    
+    friend class File;
+
     FileSystem(const std::string &fileName, const std::string &fileExt)
     : _fileName(fileName)
     , _fileExt(fileExt)
@@ -42,7 +43,8 @@ public:
     std::string getFileName () const { return _fileName + "." +_fileExt; }
 
 private:
-    bool write_block(std::ostream& ostr, int64_t idx); //is better name flush_block()?
+    bool write_block(std::ostream& ostr, int64_t idx);  //is better name flush_block()?
+    bool read_block(std::istream& istr, int64_t idx);
     bool write_file(File& file);
     
     const std::string _fileName;

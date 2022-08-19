@@ -42,7 +42,10 @@ int main()
 
     std::shared_ptr<My::User> currentUser2 = root.createUser("nikolaev");
     std::cout << "Hello, I am " << currentUser2->name() << std::endl;
+
     
+  /*
+{  
   My::User user("test");
   std::shared_ptr<My::File> file1 = fs.create_file(user, "file1");
   file1->write("aaa", 3);
@@ -52,7 +55,13 @@ int main()
 
   file1->flush();
   file2->flush();
+}
+
+My::FileSystem fs2(".\\testfilesys3", "myfs");
+fs2.read();
+My::File checkFile = fs2.open("file2");
 
 
+*/
     return 0;
 }

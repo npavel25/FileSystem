@@ -108,6 +108,7 @@ void FileSystem::flush(File& file)
     {
         auto iter = first_empty_block();
         int64_t start_idx = iter->first;
+        file.start_block_id = start_idx;
         _files[file._name] = start_idx;
 
         std::fstream fstr(getFileName(), std::fstream::out | std::fstream::binary);
@@ -148,10 +149,20 @@ bool FileSystem::write_block(std::ostream& ostr, int64_t idx)
 {
     if(ostr)
     {
-        ostr.seekp(BLOCK_SIZE * idx);
+        ostr.seekp(BLOCK_SIZE * idx, ostr.beg);
         ostr.write(reinterpret_cast<const char*>(_blocks[idx].data()), _blocks[idx].size());
     }
     return ostr.good();
+}
+
+bool FileSystem::read_block(std::istream& istr, int64_t idx)
+{
+    if(istr)
+    {
+        istr.seekg(BLOCK_SIZE * idx, istr.beg);
+        istr.read(reinterpret_cast<char*>(_blocks[idx].data()), _blocks[idx].size());
+    }
+    return istr.good();
 
 }
 

@@ -10,8 +10,8 @@ class MetaData
 {
 protected:
     static constexpr int MAGIC = 31415926;
-    static constexpr int MAX_SIZE = 1024*1024*256; // 256 Mb
-    static constexpr int BLOCK_SIZE = 1024; //1 Kb
+    static constexpr int MAX_SIZE = 1024;//*1024*256; // 256 Mb
+    static constexpr int BLOCK_SIZE = 256;//1024; //1 Kb
     
 
 public:
