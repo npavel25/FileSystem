@@ -24,7 +24,7 @@ public:
     }
     bool read(std::istream& istrm);
     bool write(std::ostream& ostrm);
-    int size() { return sizeof(MetaData); }
+    int size() { return sizeof(MetaData); } //TODO: fix it!
     size_t free_space() const {return BLOCK_SIZE * std::count_if(_FAT.begin(), _FAT.end(), 
                                               [](std::pair<int64_t, int64_t> p) { return 0 == p.second;}
                                               ); }

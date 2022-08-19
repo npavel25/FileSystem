@@ -1,3 +1,4 @@
+#include "file.h"
 #include "fs.h"
 
 #include <fstream>
@@ -7,31 +8,49 @@ namespace My {
 
 void FileSystem::create()
 {
-    std::fstream fs;
-    fs.open(getFileName(), std::fstream::out | std::fstream::binary);
-    if(fs.is_open())
+    std::fstream fstrm;
+    fstrm.open(getFileName(), std::fstream::out | std::fstream::binary);
+    if(fstrm.is_open())
     {
-        fs.write((char*)&MAGIC, sizeof(MAGIC));
-        uint64_t j = 0;
+        //fs.write((char*)&MAGIC, sizeof(MAGIC));
+        MetaData::write(fstrm);
+        //long pos = fs.tellp();
+        fstrm.seekp(BLOCK_SIZE);
+        _blocks.resize(MAX_SIZE / BLOCK_SIZE);
+        for (auto& elem: _blocks)
+        {
+            elem.resize(BLOCK_SIZE);
+            std::fill(elem.begin(), elem.end(), 0);
+            fstrm.write(reinterpret_cast<const char*>(elem.data()), elem.size());
+
+        }
+        /*uint64_t j = 0;
         for (int i=0; i < MAX_SIZE / sizeof(j); ++i)
         {
-          fs.write((char*)&j, sizeof(j));
-          //if (i%100 == 0) std::cout << "i:" << i << std::endl;
-        }
+          fstrm.write((char*)&j, sizeof(j));
+        }*/
         std::cout << "File System has been successfully created." << std::endl;
     }
-    fs.close();
+    fstrm.close();
 }
 
 bool FileSystem::read()
 {
-    std::fstream fs;
+    /*std::fstream fs;
     fs.open(getFileName(), std::fstream::in | std::fstream::binary);
     if(fs.is_open())
     {
         int magic = 0;
         fs.read((char*)&magic, sizeof(magic));
         return magic == MAGIC;
+    }
+    else return false;*/
+
+    std::fstream fs;
+    fs.open(getFileName(), std::fstream::in | std::fstream::binary);
+    if(fs.is_open())
+    {
+        return MetaData::read(fs);
     }
     else return false;
 
@@ -49,6 +68,16 @@ void FileSystem::destroy()
         std::cerr << "Could not delete file " << getFileName() << std::endl;
 
     }
+}
+//candidate for inline?
+bool FileSystem::hasEnoughFreeSpace(const File &file) 
+{ 
+    return file.size() < free_space(); 
+}
+
+std::shared_ptr<File> FileSystem::create_file(std::string name)
+{
+
 }
 
 }

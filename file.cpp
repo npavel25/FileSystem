@@ -1,6 +1,7 @@
 #include "file.h"
 
 #include <cstring>
+#include <fstream>
 
 namespace My {
 
@@ -34,6 +35,27 @@ void File::append(const void *data, size_t size)
     _size = old_size + size;
     _data.reserve(_size);
     memcpy(_data.data()+old_size, data, size);
+}
+
+void File::flush()
+{
+    _filesystem.flush(*this);
+    // 1. write metadata to disk
+    // 2. write data to disk
+    /*if(fs.hasEnoughFreeSpace(*this))
+    {
+        std::fstream fstr(fs.getFileName(), std::fstream::out | std::fstream::binary);
+        if(fstr.is_open())
+        {
+            fs.seekp(fs.BLOCK_SIZE);//skip filesystem metadata
+            fs.write(reinterpret_cast<const char*>(_data.data()),fs.BLOCK_SIZE);
+    
+        }
+    }
+    else std::cout << "Not enough free space in the file system!" << std::endl;*/
+    
+    
+
 }
 
 }

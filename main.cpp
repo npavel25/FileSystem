@@ -34,6 +34,7 @@ int main()
     if(root.is_root())
     {
         std::cout << "Hello, I am root!" << std::endl;
+        My::FileSystem& rootFS = root.create_filesystem();
     }
     std::shared_ptr<My::User> currentUser = root.createUser("nikolaev");
     std::cout << "Hello, I am " << currentUser->name() << std::endl;

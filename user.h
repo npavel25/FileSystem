@@ -9,7 +9,6 @@ namespace My {
 
 class User
 {
-
 public:
     User(std::string name)
     :_name(std::move(name))
@@ -19,9 +18,7 @@ public:
     bool is_root() { return false; };
 
 private:
-
     std::string _name;
-
 };
 
 class Root: public User
@@ -33,42 +30,20 @@ public:
         return theRoot;
     }
     
-
     std::shared_ptr<User> createUser(std::string name);
-    bool createGroup(std::string name);
     bool is_root() { return true; };
-private:
+    FileSystem& create_filesystem();
 
-    Root()
-    :User("root")
-    {}
-
-public:
     Root(const Root& root) = delete;
     Root& operator=(const Root& root) = delete;
 
 private:
+    Root()
+    :User("root")
+    {}
+
     std::vector<std::shared_ptr<User>> _users;
-    
 };
-    std::shared_ptr<User> Root::createUser(std::string name)
-    {
-        _users.emplace_back(new User(std::move(name)));
-        return _users.back();
-        //User user(name);
-        //return user;
-
-    }
-/*
-class Group
-{
-    private:
-    Group();
-    std::string _name;
-    std::set group;
-
-};
-*/
 
 }
 
