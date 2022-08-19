@@ -5,7 +5,7 @@
 
 
 namespace My {
-bool MetaData::write(std::ostream ostrm)
+bool MetaData::write(std::ostream& ostrm)
 {
     if (ostrm)
     {
@@ -38,7 +38,7 @@ bool MetaData::write(std::ostream ostrm)
 
 }
 
-bool MetaData::read(std::istream istrm)
+bool MetaData::read(std::istream& istrm)
 {
     if(istrm)
     {
