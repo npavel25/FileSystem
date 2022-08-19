@@ -7,6 +7,8 @@
 
 namespace My {
 
+class FileSystem;
+
 class User
 {
 public:

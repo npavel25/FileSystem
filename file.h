@@ -21,15 +21,17 @@ public:
     
     void open(const std::string& name);
     void read();
-    void write(const void *data, size_t size);
-    void append(const void *data, size_t size);
+    void write(const void* data, size_t size);
+    void append(const void* data, size_t size);
     void flush();
-    size_t size() const { return _size; }
+    size_t size() const { return FileMetaData::size() + _size; }
+    std::string name() { return _name; }
 
 private:
 
-    File( std::string name, FileSystem& filesystem)
-        :_name(std::move(name))
+    File( User& owner, std::string name, FileSystem& filesystem)
+        : FileMetaData(owner) 
+        , _name(std::move(name))
         , _filesystem(filesystem)
     {}
     File();

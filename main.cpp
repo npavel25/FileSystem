@@ -1,3 +1,4 @@
+#include "file.h"
 #include "fs.h"
 #include "metadata.h"
 #include "user.h"
@@ -42,6 +43,16 @@ int main()
     std::shared_ptr<My::User> currentUser2 = root.createUser("nikolaev");
     std::cout << "Hello, I am " << currentUser2->name() << std::endl;
     
+  My::User user("test");
+  std::shared_ptr<My::File> file1 = fs.create_file(user, "file1");
+  file1->write("aaa", 3);
+  
+  std::shared_ptr<My::File> file2 = fs.create_file(user, "file2");
+  file2->write("bbbb", 4);
+
+  file1->flush();
+  file2->flush();
+
 
     return 0;
 }

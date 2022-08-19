@@ -4,6 +4,7 @@
 
 //#include "file.h"
 #include "metadata.h"
+//#include "user.h"
 
 #include <cstdint>
 #include <iostream>
@@ -13,6 +14,7 @@
 
 namespace My {
 class File;
+class User;
 
 class FileSystem: private MetaData 
 {
@@ -32,7 +34,7 @@ public:
     bool read();
     void destroy();
 
-    std::shared_ptr<File> create_file(std::string name);
+    std::shared_ptr<File> create_file(User& owner, const std::string& name);
     void flush(File& file);
     void remove_file(const std::string& name);
 
@@ -40,6 +42,8 @@ public:
     std::string getFileName () const { return _fileName + "." +_fileExt; }
 
 private:
+    bool write_block(std::ostream& ostr, int64_t idx); //is better name flush_block()?
+    bool write_file(File& file);
     
     const std::string _fileName;
     const std::string _fileExt;

@@ -11,10 +11,10 @@ void FileSystem::create()
     std::fstream fstrm;
     fstrm.open(getFileName(), std::fstream::out | std::fstream::binary);
     if(fstrm.is_open())
-    {
-        //fs.write((char*)&MAGIC, sizeof(MAGIC));
-        
-        _blocks.resize(MAX_SIZE / BLOCK_SIZE + 1);
+    {   
+        // additional block is used to store MetaData
+        _blocks.resize((MAX_SIZE / BLOCK_SIZE) + 1);
+        //std::cout << "Number of blocks: " << _blocks.size() << std::endl;
         for (auto& elem: _blocks)
         {
             elem.resize(BLOCK_SIZE);
@@ -76,9 +76,11 @@ bool FileSystem::hasEnoughFreeSpace(const File &file)
     return file.size() < free_space(); 
 }
 
-std::shared_ptr<File> FileSystem::create_file(std::string name)
+std::shared_ptr<File> FileSystem::create_file(User& owner, const std::string& name)
 {
-
+    std::shared_ptr<File> file { new File(owner, name, *this)};
+    _files[name] = file->start_block_id;
+    return file;
 }
 
 void FileSystem::remove_file(const std::string& name)
@@ -97,6 +99,59 @@ void FileSystem::remove_file(const std::string& name)
             MetaData::write(fstrm);
         }
     }
+
+}
+
+void FileSystem::flush(File& file)
+{
+    if(hasEnoughFreeSpace(file))
+    {
+        auto iter = first_empty_block();
+        int64_t start_idx = iter->first;
+        _files[file._name] = start_idx;
+
+        std::fstream fstr(getFileName(), std::fstream::out | std::fstream::binary);
+        
+        //write metadata and initial part of file
+        //file.
+
+        //for (size_t number_of_blocks = file.size() / BLOCK_SIZE; number_of_blocks; --number_of_blocks)
+        size_t number_of_blocks = file.size() / BLOCK_SIZE + 1;
+        do
+        {
+            write_block(fstr, start_idx);
+            if(number_of_blocks>1)
+            {
+                auto itr = first_empty_block();
+                int64_t idx = iter->first;
+                _FAT[start_idx] = idx;
+                start_idx = idx;
+            }
+            else 
+            {
+                _FAT[start_idx] = -1;
+            }
+            
+            --number_of_blocks;
+        } while(number_of_blocks);
+        
+        MetaData::write(fstr);
+    }
+    else
+    {
+        std::cout << "File System does not have enough free space to store file " << file.name() << std::endl;
+    }
+
+}
+
+bool FileSystem::write_block(std::ostream& ostr, int64_t idx)
+{
+    if(ostr)
+    {
+        ostr.seekp(BLOCK_SIZE * idx);
+        ostr.write(reinterpret_cast<const char*>(_blocks[idx].data()), _blocks[idx].size());
+    }
+    return ostr.good();
 
 }
 

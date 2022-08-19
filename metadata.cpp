@@ -108,6 +108,7 @@ void MetaData::info() const
     std::cout << "BLOCK_SIZE: " << BLOCK_SIZE << std::endl;
     std::cout << "MAGIC: " << MAGIC << std::endl;
     std::cout << "Number of blocks: " << _FAT.size() << std::endl;
+    std::cout << "Number of blocks from the other side: " << _files.size() << std::endl;
     std::cout << "Free space: " << free_space() << std::endl;
 }
 }
