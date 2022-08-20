@@ -10,7 +10,8 @@ bool FileMetaData::read(std::istream& istrm)
         size_t ownername_size = 0;
         istrm.read(reinterpret_cast<char*>(&ownername_size), sizeof(ownername_size));
         std::string ownername;
-        istrm.read(reinterpret_cast<char*>(&ownername), ownername_size);
+        ownername.resize(ownername_size);
+        istrm.read(&ownername[0], ownername_size);
     }
     return istrm.good();
 }

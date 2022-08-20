@@ -66,7 +66,8 @@ bool MetaData::read(std::istream& istrm)
             size_t filename_size = 0;
             istrm.read(reinterpret_cast<char*>(&filename_size), sizeof(filename_size));
             std::string filename;
-            istrm.read(reinterpret_cast<char*>(&filename), filename_size);
+            filename.resize(filename_size);
+            istrm.read((&filename[0]), filename_size);
             int64_t start_idx = 0;
             istrm.read(reinterpret_cast<char*>(&start_idx), sizeof(start_idx));
             _files[filename] = start_idx;

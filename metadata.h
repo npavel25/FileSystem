@@ -26,13 +26,13 @@ public:
     bool write(std::ostream& ostrm);
     int size() { return sizeof(MetaData); } //TODO: fix it!
     size_t free_space() const {return BLOCK_SIZE * std::count_if(_FAT.begin(), _FAT.end(), 
-                                              [](std::pair<int64_t, int64_t> p) { return 0 == p.second;}
+                                              [](const auto& p) { return 0 == p.second;} /*std::pair<int64_t, int64_t>*/
                                               ); }
     void info() const;
     void clear_FAT(int64_t start_idx);
     auto first_empty_block() {return std::find_if(_FAT.begin(), _FAT.end(), 
-                                              [](auto p){return 0 == p.second;}
-                                              ); };
+                                              [](const auto& p){return 0 == p.second;}
+                                              ); }
 
 protected:
     //block_id -> next_block_id

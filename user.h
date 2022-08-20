@@ -17,7 +17,7 @@ public:
     {}
     
     std::string name() const { return _name; }
-    bool is_root() { return false; };
+    virtual bool is_root() { return false; };
 
 private:
     std::string _name;
